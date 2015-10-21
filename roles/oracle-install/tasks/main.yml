@@ -1,0 +1,78 @@
+################################################################################
+# ==> Tasks for oracle-install role. This role installs the Oracle Database
+# ==> 12c software, configure a database, listener and ex express
+# ==> author: Christos Vezalis
+################################################################################
+
+- name: Create folder for installation files
+  file: state=directory path={{ installation_folder }}
+# ==> Copy installer files
+- name: Copy installer files
+  copy: src={{ item }} dest='{{ installation_folder }}/'
+  with_items: '{{ installer_archives }}'
+
+# ==> extract files
+- name: Extract installation files
+  command: 'unzip {{ installation_folder }}/{{ item }} -d {{ installation_folder }}/'
+  with_items: '{{ installer_archives }}'
+
+# ==> generate response file
+- name: Gerenerate the response file for software only installation
+  template: src=db_install.rsp.j2 dest={{ installation_folder }}/db_install.rsp
+
+# ==> execute installation
+- name: Install Product
+  command: '{{ installation_folder}}/database/runInstaller -silent -ignorePrereq -ignoreSysPrereqs -waitforcompletion -responseFile {{ installation_folder }}/db_install.rsp'
+
+# ==> execute Inventory command as root
+- name: Execute Inventoty root command
+  command: '{{ inventory_location }}/orainstRoot.sh'
+  sudo_user: root
+
+# ==> execute DB home command as root
+- name: Execute DB home rfoot command
+  command: '{{ oracle_home }}/root.sh'
+  sudo_user: root
+
+# ==> TODO: Create a new role for creating the database
+# ==> Create Listener TODO: Parameterize port, name etc
+- name: copy listener response file
+  template: src=netca.rsp.j2 dest={{ installation_folder }}/netca.rsp
+
+- name: Create listener using netca
+  command: '{{ oracle_home }}/bin/netca -silent -responseFile {{ installation_folder }}/netca.rsp'
+
+- name: copy response file for dbca
+  template: src=dbca.rsp.j2 dest={{ installation_folder }}/dbca.rsp
+
+- name: create database
+  command: '{{ oracle_home }}/bin/dbca -silent -responseFile {{ installation_folder }}/dbca.rsp'
+
+- name: create oracle home variable
+  lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_HOME={{ oracle_home }}'
+
+- name: create oracle sid variable
+  lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export ORACLE_SID={{ oracle_sid }}'
+
+- name: add oracle home bin folder
+  lineinfile: dest='/home/{{ oracle_user }}/.bashrc' line='export PATH=$PATH:$ORACLE_HOME/bin'
+
+- name: change oratab
+  lineinfile: dest='/etc/oratab' regexp='^{{ oracle_sid }}:{{ oracle_home }}:N' line='{{ oracle_sid }}:{{ oracle_home }}:Y'
+  sudo_user: root
+
+- name: copy init.d oracle script to /etc/init.d
+  template: src=oradb.j2 dest=/etc/init.d/oradb mode=750
+  sudo_user: root
+
+- name: enable oradb script to run at startup
+  command: 'chkconfig --add oradb'
+  sudo_user: root
+
+# You can remove it for non vagrant server.
+#- name: reboot vagrant virtual machine
+#  local_action: shell vagrant reload
+#  sudo_user: '{{ host_username }}'
+#  ignore_errors: yes
+#  tags:
+#    - reboot-vagrant

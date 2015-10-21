@@ -1,0 +1,5 @@
+install_db: INSTALL_DB_SWONLY
+oracle_hostname: '{{ server_hostname }}'
+inventory_os_group: '{{ oracle_install_group }}'
+inventory_location: '{{ oracle_base }}/inventory'
+oracle_home: '{{ oracle_base }}/{{ oracle_user }}/product/{{ oracle_install_version }}/{{ dbhome_name }}'

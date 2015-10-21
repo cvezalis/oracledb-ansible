@@ -1,0 +1,58 @@
+################################################################################
+# ==> Task Required for Configure Linux to host Oracle Database 12c
+# ==> Supports version 12.1.0.2
+# ==> Author: Christos Vezalis
+################################################################################
+
+# ==> Configure Linux
+- name: Install required libraries
+  yum: name={{ item }} state=present
+  with_items: packages_list
+- name: Disable SELinux
+  selinux: state=disabled
+- name: Disable Firewall Deamon (firewalld)
+  service: name=firewalld state=stopped enabled=no
+- name: Change kernel parameters
+  sysctl: name="{{ item.key }}" value="{{ item.value }}" state=present
+  with_dict: kernel_params
+
+# ==> Create users and groups
+- name: Create groups
+  group: name={{ oracle_install_group }} state=present
+- name: add extra groups
+  group: name={{ item }} state=present
+  with_items: extra_groups
+- name: Create user
+  user: name={{ oracle_user }} group={{ oracle_install_group }} password={{ oracle_os_user_pass }}
+- name: Add extra groups
+  user: name={{ oracle_user }} groups={{ item }} append=yes
+  with_items: extra_groups
+
+# ==> Add limits for oracle user
+- name: Add oracle user limits
+  lineinfile: dest=/etc/security/limits.conf line='{{ oracle_user }} {{ item.limit }} {{ item.type}} {{ item.value }}'
+  with_items:
+    - { limit: 'soft', type: nofile, value: '{{ soft_no_file }}' }
+    - { limit: 'hard', type: nofile, value: '{{ hard_no_file }}' }
+    - { limit: 'soft', type: nproc, value: '{{ soft_nproc }}' }
+    - { limit: 'hard', type: nproc, value: '{{ hard_nproc }}' }
+    - { limit: 'soft', type: stack, value: '{{ soft_stack }}' }
+    - { limit: 'hard', type: stack, value: '{{ hard_stack }}' }
+    - { limit: 'soft', type: memlock, value: '{{ soft_memlock }}' }
+    - { limit: 'hard', type: memlock, value: '{{ hard_memlock }}' }
+
+# ==> Create Base directories
+- name: Create Oracle Base directory
+  file: state=directory path={{ oracle_base }} owner={{ oracle_user }} group={{ oracle_install_group }}
+
+# ==> Disable transparent hugepages
+- name: Copy script
+  copy: src=disable_trans_hugepages.sh dest='~/disable_trans_hugepages.sh' mode=755
+- name: Disable Transparent Huge Pages
+  shell: '~/disable_trans_hugepages.sh'
+
+# ==> Configure huge pages
+- name: configure kernel for hugepages
+  sysctl: name="vm.nr_hugepages" value="{{ hugepages_nr }}" state=present
+  tags:
+    - hugepages

@@ -1,0 +1,32 @@
+#!/bin/sh
+# chkconfig: 345 99 10
+# description: Oracle auto start-stop script.
+#
+# Change the value of ORACLE_HOME to specify the correct Oracle home
+# directory for your installation.
+
+ORACLE_HOME={{ oracle_home }}
+#
+# Change the value of ORACLE to the login name of the
+# oracle owner at your site.
+#
+ORACLE={{ oracle_user }}
+PATH=${PATH}:$ORACLE_HOME/bin
+export ORACLE_HOME PATH
+#
+case $1 in
+'start')
+        runuser -l $ORACLE -c '$ORACLE_HOME/bin/dbstart $ORACLE_HOME &'
+        touch /var/lock/subsys/dbora
+        ;;
+'stop')
+        runuser -l $ORACLE -c '$ORACLE_HOME/bin/dbshut $ORACLE_HOME'
+        rm -f /var/lock/subsys/dbora
+        ;;
+*)
+        echo "usage: $0 {start|stop}"
+        exit
+        ;;
+esac
+#
+exit

@@ -1,0 +1,3 @@
+installation_folder: '{{ oracle_base}}/installation'
+
+server_hostname: '{{ ansible_fqdn }}'
