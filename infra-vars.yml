@@ -15,7 +15,7 @@ oracle_edition: 'EE'
 oracle_dba_group: dba
 oracle_oper_group: oper
 oracle_database_type: 'GENERAL_PURPOSE'
-oracle_globalname: 'orcl.oradb1.private'
+oracle_globalname: 'orcl.oradb3.private'
 oracle_sid: 'orcl'
 oracle_conf_as_container_db: 'false'
 oracle_pdb_name:
