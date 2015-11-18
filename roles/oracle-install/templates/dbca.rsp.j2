@@ -212,7 +212,7 @@ SID = {{ oracle_sid }}
 # Default value : false
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#CREATEASCONTAINERDATABASE =
+CREATEASCONTAINERDATABASE = {{ create_container_database }}
 
 #-----------------------------------------------------------------------------
 # Name          : NUMBEROFPDBS
@@ -222,7 +222,7 @@ SID = {{ oracle_sid }}
 # Default value : 0
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#NUMBEROFPDBS =
+NUMBEROFPDBS = {{ number_of_pdbs }}
 
 #-----------------------------------------------------------------------------
 # Name          : PDBNAME 
@@ -232,7 +232,7 @@ SID = {{ oracle_sid }}
 # Default value : None
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#PDBNAME =
+PDBNAME = {{ pdb_prefix }}
 
 #-----------------------------------------------------------------------------
 # Name          : PDBADMINPASSWORD
@@ -242,7 +242,7 @@ SID = {{ oracle_sid }}
 # Default value : None
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-# PDBADMINPASSWORD = ""
+PDBADMINPASSWORD = {{ oracle_pass_all_users }}
 
 #-----------------------------------------------------------------------------
 # Name          : NODELIST
@@ -324,7 +324,7 @@ EMCONFIGURATION = DBEXPRESS
 # Mandatory     : No, will be picked up from DBEXPRESS_HTTPS_PORT env variable
 #                 or auto generates a free port between 5500 and 5599
 #-----------------------------------------------------------------------------
-#EMEXPRESSPORT = "5500"
+EMEXPRESSPORT = "5500"
 
 
 #-----------------------------------------------------------------------------
@@ -522,7 +522,7 @@ RECOVERYAREADESTINATION= {{ oracle_recoveryloc }}
 # Default value : "US7ASCII"
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-CHARACTERSET = "AL16UTF16"
+CHARACTERSET = {{ oracle_charset }}
 
 #-----------------------------------------------------------------------------
 # Name          : NATIONALCHARACTERSET
@@ -532,7 +532,7 @@ CHARACTERSET = "AL16UTF16"
 # Default value : "AL16UTF16"
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#NATIONALCHARACTERSET= "UTF8"
+NATIONALCHARACTERSET= "UTF8"
 
 #-----------------------------------------------------------------------------
 # Name          : REGISTERWITHDIRSERVICE

@@ -17,8 +17,11 @@ oracle_oper_group: oper
 oracle_database_type: 'GENERAL_PURPOSE'
 oracle_globalname: 'orcl.oradb3.private'
 oracle_sid: 'orcl'
-oracle_conf_as_container_db: 'false'
-oracle_pdb_name:
+create_container_database: 'true'
+number_of_pdbs: '1'
+oracle_conf_as_container_db: 'true'
+pdb_prefix: 'db'
+oracle_pdb_name: 'db01'
 oracle_charset: 'AL32UTF8'
 oracle_memory_option: 'false'
 # memory target
