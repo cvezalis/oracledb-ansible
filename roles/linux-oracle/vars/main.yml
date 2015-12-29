@@ -10,7 +10,7 @@ packages_list:
   - libaio.i686
   - libaio-devel
   - libaio-devel.i686
-  - libgcc.i686
+  #- libgcc.i686
   - libstdc++.i686
   - libstdc++-devel
   - libstdc++-devel.i686
