@@ -76,3 +76,12 @@
 #  ignore_errors: yes
 #  tags:
 #    - reboot-vagrant
+
+- name: Create trigger for autostart pluggable db's
+  copy: src=start-pluggable-dbs.sh dest={{ installation_folder }}/ mode=755
+  tags:
+    - start-pluggable
+
+- shell: '{{ installation_folder }}/start-pluggable-dbs.sh'
+  tags:
+    - start-pluggable
