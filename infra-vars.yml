@@ -6,34 +6,32 @@ extra_groups:
 oracle_base: /oracle/app
 
 installer_archives:
-  - 'linuxamd64_12102_database_1of2.zip'
-  - 'linuxamd64_12102_database_2of2.zip'
+  - "linuxamd64_12102_database_1of2.zip"
+  - "linuxamd64_12102_database_2of2.zip"
 
-oracle_install_version: '12102'
-dbhome_name: 'dbhome_1'
-oracle_edition: 'EE'
+oracle_install_version: "12102"
+dbhome_name: "dbhome_1"
+oracle_edition: "EE"
 oracle_dba_group: dba
 oracle_oper_group: oper
-oracle_database_type: 'GENERAL_PURPOSE'
-oracle_globalname: 'orcl.oradb3.private'
-oracle_sid: 'orcl'
-create_container_database: 'true'
-number_of_pdbs: '1'
-oracle_conf_as_container_db: 'true'
-pdb_prefix: 'db'
-oracle_pdb_name: 'db01'
-oracle_charset: 'AL32UTF8'
-oracle_memory_option: 'false'
+oracle_database_type: "GENERAL_PURPOSE"
+oracle_globalname: "orcl.oradb3.private"
+oracle_sid: "orcl"
+create_container_database: "true"
+number_of_pdbs: "1"
+oracle_conf_as_container_db: "true"
+pdb_prefix: "db"
+oracle_pdb_name: "db01"
+oracle_charset: "AL32UTF8"
+oracle_memory_option: "false"
 # memory target
 oracle_memory_mb: 1536
-oracle_install_samples: 'true'
-oracle_management_option: 'DEFAULT'
-oracle_enable_recovery: 'true'
-oracle_storage_type: 'FILE_SYSTEM_STORAGE'
-oracle_dataloc: '{{ oracle_base }}/oradata'
-oracle_recoveryloc: '{{ oracle_base }}/recovery_area'
-oracle_decline_security_updates: 'yes'
+oracle_install_samples: "true"
+oracle_management_option: "DEFAULT"
+oracle_enable_recovery: "true"
+oracle_storage_type: "FILE_SYSTEM_STORAGE"
+oracle_dataloc: "{{ oracle_base }}/oradata"
+oracle_recoveryloc: "{{ oracle_base }}/recovery_area"
+oracle_decline_security_updates: "True"
 hugepages_nr: 578
 
-# Username of the host machine. We use it for restart the vagrant machine
-#host_username: chris
