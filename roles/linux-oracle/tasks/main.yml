@@ -7,26 +7,26 @@
 # ==> Configure Linux
 - name: Install required libraries
   yum: name={{ item }} state=present
-  with_items: packages_list
+  with_items: "{{ packages_list }}"
 - name: Disable SELinux
   selinux: state=disabled
 - name: Disable Firewall Deamon (firewalld)
   service: name=firewalld state=stopped enabled=no
 - name: Change kernel parameters
   sysctl: name="{{ item.key }}" value="{{ item.value }}" state=present
-  with_dict: kernel_params
+  with_dict: "{{ kernel_params }}"
 
 # ==> Create users and groups
 - name: Create groups
   group: name={{ oracle_install_group }} state=present
 - name: add extra groups
   group: name={{ item }} state=present
-  with_items: extra_groups
+  with_items: "{{ extra_groups }}"
 - name: Create user
   user: name={{ oracle_user }} group={{ oracle_install_group }} password={{ oracle_os_user_pass }}
 - name: Add extra groups
   user: name={{ oracle_user }} groups={{ item }} append=yes
-  with_items: extra_groups
+  with_items: "{{ extra_groups }}"
 
 # ==> Add limits for oracle user
 - name: Add oracle user limits
